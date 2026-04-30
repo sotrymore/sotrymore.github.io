@@ -9,6 +9,9 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Это уберет варнинг про Node 20
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,18 +19,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 24 # Используем актуальную версию 2026 года
+          node-version: 24
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build
-        # Если TS всё равно будет мешать, можно заменить на: run: npx vite build
-        run: npm run build 
+      - name: Find package.json and Install
+        run: |
+          # Если package.json не в корне, этот скрипт его найдет
+          PACKAGE_PATH=$(find . -name "package.json" -not -path "*/node_modules/*" | head -n 1)
+          if [ -z "$PACKAGE_PATH" ]; then
+            echo "ОШИБКА: package.json не найден вообще!"
+            ls -R
+            exit 1
+          fi
+          DIR=$(dirname "$PACKAGE_PATH")
+          echo "Проект найден в папке: $DIR"
+          cd "$DIR"
+          npm install
+          npm run build
+          # Перемещаем результат в корень для загрузки
+          if [ "$DIR" != "." ]; then
+            mv dist ../dist
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
