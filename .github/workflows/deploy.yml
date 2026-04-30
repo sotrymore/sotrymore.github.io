@@ -2,12 +2,15 @@ name: Deploy Vite Project
 
 on:
   push:
-    branches: ["master"] # На скриншоте видно, что у вас ветка master
+    branches: ["master"]
 
 permissions:
   contents: read
   pages: write
   id-token: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Убираем варнинг из вашего скриншота
 
 jobs:
   build:
@@ -16,18 +19,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check files
+        run: ls -R # Это поможет нам увидеть, где лежит package.json
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 24 # Обновили до актуальной, чтобы убрать Warning
-          cache: 'npm'
-
+          node-version: 24
+          
       - name: Install dependencies
-        # Если у вас нет package-lock.json, npm ci не сработает, используем install
-        run: npm install 
+        run: npm install
 
       - name: Build
-        # Проверьте, что в package.json есть скрипт "build"
         run: npm run build
 
       - name: Upload artifact
