@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Четыре в ряд — Голосовое управление Салют</title>
     <meta name="description" content="Игра Четыре в ряд с голосовым управлением через ассистента Салют (Sber)" />
+    
+    <!-- 1. ПОДКЛЮЧАЕМ SDK САЛЮТА (обязательно перед основным кодом) -->
+    <script src="https://unpkg.com/@salutejs/client@latest/dist/assistant.min.js"></script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- 2. ИСПРАВЛЯЕМ ПУТЬ К СКРИПТУ -->
+    <!-- Убираем косую черту в начале, чтобы путь был относительным -->
+    <script type="module" src="src/main.tsx"></script>
   </body>
 </html>
