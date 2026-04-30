@@ -1,16 +1,13 @@
-name: Deploy Vite Project
+name: Deploy Vite Site
 
 on:
   push:
-    branches: ["master"]
+    branches: ["master"] # У вас на скриншоте ветка master
 
 permissions:
   contents: read
   pages: write
   id-token: write
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Убираем варнинг из вашего скриншота
 
 jobs:
   build:
@@ -19,24 +16,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check files
-        run: ls -R # Это поможет нам увидеть, где лежит package.json
-
-      - name: Set up Node
+      - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
-          
+          node-version: 22 # Используем стабильную 22 версию
+          cache: 'npm'
+
       - name: Install dependencies
-        run: npm install
+        run: npm install # Просто install (не ci), чтобы было надежнее
 
       - name: Build
-        run: npm run build
+        run: npm run build # Эта команда создаст папку dist
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: './dist' # ГЛАВНОЕ: загружаем папку со сборкой, а не корень!
 
   deploy:
     needs: build
