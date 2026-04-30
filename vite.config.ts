@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 export default defineConfig({
   // ЗАМЕНИТЕ 'название-вашего-репозитория' на реальное имя вашего проекта на GitHub
   // Например, если ссылка https://github.com/sotrymore/my-game, то base: '/my-game/'
-  base: 'sotrymore.github.io', 
+  base: '/', 
   
   plugins: [
     react(),
