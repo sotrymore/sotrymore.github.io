@@ -4,16 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Четыре в ряд — Голосовое управление Салют</title>
-    <meta name="description" content="Игра Четыре в ряд с голосовым управлением через ассистента Салют (Sber)" />
     
-    <!-- 1. ПОДКЛЮЧАЕМ SDK САЛЮТА (обязательно перед основным кодом) -->
+    <!-- 1. Подключаем SDK Салюта через HTTPS -->
     <script src="https://unpkg.com/@salutejs/client@latest/dist/assistant.min.js"></script>
   </head>
   <body>
     <div id="root"></div>
-    
-    <!-- 2. ИСПРАВЛЯЕМ ПУТЬ К СКРИПТУ -->
-    <!-- Убираем косую черту в начале, чтобы путь был относительным -->
+
+    <!-- 2. Путь для Vite (без слэша в начале!) -->
     <script type="module" src="src/main.tsx"></script>
+
+    <!-- 3. Скрипт-проверка для Салюта -->
+    <script>
+      window.addEventListener('load', () => {
+        console.log("Страница загружена, проверяем Салют...");
+        if (window.AssistantClient) {
+          console.log("SDK Салюта найден!");
+        } else {
+          console.error("SDK Салюта не загрузился. Проверьте интернет или ссылку на скрипт.");
+        }
+      });
+    </script>
   </body>
 </html>
