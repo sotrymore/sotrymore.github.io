@@ -2,7 +2,7 @@ name: Deploy Vite Site
 
 on:
   push:
-    branches: ["master"] # У вас на скриншоте ветка master
+    branches: ["master"]
 
 permissions:
   contents: read
@@ -19,19 +19,20 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22 # Используем стабильную 22 версию
+          node-version: 24 # Используем актуальную версию 2026 года
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install # Просто install (не ci), чтобы было надежнее
+        run: npm install
 
       - name: Build
-        run: npm run build # Эта команда создаст папку dist
+        # Если TS всё равно будет мешать, можно заменить на: run: npx vite build
+        run: npm run build 
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist' # ГЛАВНОЕ: загружаем папку со сборкой, а не корень!
+          path: './dist'
 
   deploy:
     needs: build
